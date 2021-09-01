@@ -20,12 +20,11 @@ def donut(u, v):
 
 def color(i):
     if i <= density/2:
-        c = i*2/(density-1)
+        c = i*2/(density)
+        return [0, c*.5, c]
     else:
-        c = 2 - 2*i/(density-1)
-
-    colorv = [c, c, c]
-    return colorv
+        c = 2 - 2*i/(density)
+        return [c*.7, 0, c*.5]
 
 
 def draw_donut():
@@ -47,7 +46,7 @@ def draw():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glPushMatrix()
 
-    glRotatef(angle, -1, -1, 0)
+    glRotatef(angle, 1, 1, 0)
     draw_donut()
 
     glPopMatrix()
@@ -69,7 +68,7 @@ glutCreateWindow("Donut")
 glutDisplayFunc(draw)
 glEnable(GL_MULTISAMPLE)
 glEnable(GL_DEPTH_TEST)
-glClearColor(0., 0., 0., 1.)
+glClearColor(.8, .8, .8, 1.)
 gluPerspective(45, 800.0/600.0, 0.1, 100.0)
 glTranslatef(0.0, 0.0, -20)
 glutTimerFunc(50, timer, 1)
