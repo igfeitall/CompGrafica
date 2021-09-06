@@ -20,7 +20,6 @@ def f(u, v):
 
 def color(i):
     c = i/(density-1)
-    print(c)
     colorv = [c, c, c]
     return colorv
 
@@ -42,6 +41,7 @@ def desenha():
     global a
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glPushMatrix()
+    glRotatef(15, -1, 0, 1)
     glRotatef(a, 0, 1, 0)
     desenhaEsfera()
     glPopMatrix()
