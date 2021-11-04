@@ -13,20 +13,20 @@ ESCAPE = b'\033'
 # Number of the glut window.
 window = 0
 
-rot = 1.0
-r = 1
+angle = [0,0]
+r = [.5,1,.25]
 density = 50
 halfpi = math.pi/2
 
-# texture = []
+texture = []
 
-def LoadTextures():
+def LoadTextures(arquivo):
     global texture
-    texture = [ glGenTextures(1) ]
+    texture.append(glGenTextures(1))
 
     ################################################################################
-    glBindTexture(GL_TEXTURE_2D, texture[0])
-    reader = png.Reader(filename="./mapa.png")
+    glBindTexture(GL_TEXTURE_2D, texture[-1])
+    reader = png.Reader(filename=arquivo)
     w, h, pixels, metadata = reader.read_flat()
     if(metadata['alpha']):
         modo = GL_RGBA
@@ -45,7 +45,9 @@ def LoadTextures():
 
 
 def InitGL(Width, Height):             
-    LoadTextures()
+    LoadTextures("terra.png")
+    LoadTextures("sol.png")
+    LoadTextures("lua.png")
     glEnable(GL_TEXTURE_2D)
     glClearColor(0.0, 0.0, 0.0, 0.0) 
     glClearDepth(1.0)
@@ -65,44 +67,60 @@ def ReSizeGLScene(Width, Height):
     gluPerspective(45.0, float(Width)/float(Height), 0.1, 100.0)
     glMatrixMode(GL_MODELVIEW)
 
-def f(u, v):
+def f(u, v,index):
     theta = (u*math.pi/(density-1)) - halfpi
     phi = (v*2*math.pi)/(density-1)
 
-    x = r*math.cos(theta)*math.cos(phi)
-    y = r*math.sin(theta)
-    z = r*math.cos(theta)*math.sin(phi)
+    x = r[index]*math.cos(theta)*math.cos(phi)
+    y = r[index]*math.sin(theta)
+    z = r[index]*math.cos(theta)*math.sin(phi)
     return x, y, z
 
-def DrawEarth():
-
+def DrawStar(index):
+    glBindTexture(GL_TEXTURE_2D, texture[index])
     glBegin(GL_TRIANGLE_STRIP)
+
     for i in range(density):  
         for j in range(density):
             glTexCoord2f((49 - j)/(density - 1), (49 - i)/(density - 1)) 
-            glVertex3fv(f(i,j))
+            glVertex3fv(f(i,j,index))
             glTexCoord2f((49 - j)/(density - 1), (49 - i - 1)/(density - 1)) 
-            glVertex3fv(f(i + 1,j))
-
+            glVertex3fv(f(i + 1,j,index))
     glEnd()
 
+def OrbitPosition(x, y , z, distance, angle):    
+    x2 = x + (distance * math.cos(angle))
+    y2 = y + (distance * math.sin(angle))
+    z2 = z
+
+    return x2, y2, z2
 
 def DrawGLScene():
-    global rot, texture
+    global rot, texture, angle
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)    
-    glLoadIdentity()                   
-    glClearColor(0.5,0.5,0.5,1.0)            
-    glTranslatef(0.0,0.0,-5.0)
-    glRotatef(rot,0.0,1.0,0.0)          
-    #glRotatef(yrot,0.0,1.0,0.0)           
-    #glRotatef(zrot,0.0,0.0,1.0) 
-    glBindTexture(GL_TEXTURE_2D, texture[0])
+    glLoadIdentity()                 
+    glClearColor(0.1,0.1,0.1,1.0)            
+    glTranslatef(0.0,0.0,-10.0)      
 
-    DrawEarth()
+    #draw sun
+    DrawStar(1)
     
-    rot = rot + 0.2
+    #draw earth
+    glPushMatrix()
+    earthPos = OrbitPosition(0,0,-10,7,angle[0])
+    glTranslatef(*earthPos)
+    DrawStar(0)
+    glPopMatrix()
 
+    #draw moon
+    glPushMatrix()
+    glTranslatef(*OrbitPosition(*earthPos,1.3,angle[1]))
+    DrawStar(2)
+    glPopMatrix()
+
+    angle[0] += 0.02
+    angle[1] += 0.2
     glutSwapBuffers()
 
 def main():
@@ -110,7 +128,7 @@ def main():
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)    
     glutInitWindowSize(640, 480)
     glutInitWindowPosition(0, 0)
-    glutCreateWindow("Textura Terra")
+    glutCreateWindow("Textura Sistema solar")
     glutDisplayFunc(DrawGLScene)
     glutIdleFunc(DrawGLScene)
     glutReshapeFunc(ReSizeGLScene)
