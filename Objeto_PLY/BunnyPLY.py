@@ -3,24 +3,12 @@ from OpenGL.GLU import *
 from OpenGL.GL import *
 from PLYLoader import *
 
-x = 100
-
 def display():
-    global ply, x
+    global ply
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-    glRotatef(2,1,3,0)
 
-    glPushMatrix()
     ply.draw()
-    glPopMatrix()
-
-    glPushMatrix()
-    glTranslate(x,10,-80)
-    ply.draw()
-    glPopMatrix()
     glutSwapBuffers()
-
-    x = x-0.5
 
 def timer(i):
     glutPostRedisplay()
@@ -47,13 +35,13 @@ def init():
     glShadeModel(GL_SMOOTH)
     glEnable(GL_DEPTH_TEST)
     glEnable(GL_MULTISAMPLE)
-    ply = PLY("cessna.obj")
+    ply = PLY("bun_zipper.ply")
 
 def main():
     glutInit(sys.argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE)
     glutInitWindowSize(800,600)
-    glutCreateWindow("Obj")
+    glutCreateWindow("Bunny")
     glutReshapeFunc(reshape)
     glutDisplayFunc(display)
     glutTimerFunc(50,timer,1)
