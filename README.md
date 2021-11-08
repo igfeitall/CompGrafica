@@ -11,4 +11,7 @@ Repositório para guardar trabalhos de computação gráfica, usando frameworks 
 
 ## Trabalho 2
 
--[Textura Dado (OpenGL)](https://github.com/igfeitall/CompGrafica/tree/main/Textura_Dado) -[Sistema Solar (OpenGL)](https://github.com/igfeitall/CompGrafica/tree/main/Sistema_Solar) -[Solidos Iluminados (OpenGL)](https://github.com/igfeitall/CompGrafica/tree/main/Ilumina%C3%A7%C3%A3o) -[Modelo.PLY (OpenGL)](https://github.com/igfeitall/CompGrafica/tree/main/Objeto_PLY)
+- [Textura Dado (OpenGL)](https://github.com/igfeitall/CompGrafica/tree/main/Textura_Dado) 
+- [Sistema Solar (OpenGL)](https://github.com/igfeitall/CompGrafica/tree/main/Sistema_Solar) 
+- [Solidos Iluminados (OpenGL)](https://github.com/igfeitall/CompGrafica/tree/main/Ilumina%C3%A7%C3%A3o) 
+- [Modelo.PLY (OpenGL)](https://github.com/igfeitall/CompGrafica/tree/main/Objeto_PLY)
